@@ -1,0 +1,29 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<YoutubeStore.Web.Models.YoutubePlaylistViewModel>
+@using ContentModels = Umbraco.Web.PublishedModels;
+@{
+	Layout = null;
+}
+
+<button id="playlistRefresh">Refresh Playlist</button>
+
+@foreach (var video in Model.YoutubeVideos)
+{
+    <div>
+        <h1>@video.Title</h1>
+        <img src="@video.ThumbnailUrl"/>
+        <a href="@video.VideoUrl" target="_blank">Open Video</a>
+    </div>
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script language="javascript">
+    $('#playlistRefresh').on('click',
+        function(e) {
+            var postUrl = "/Umbraco/Api/PlaylistApi/RefreshPlaylist?playlistId=@Model.PlaylistId"; 
+
+            $.post(postUrl)
+                .done(function( data ) {
+                    location.reload(false); 
+                });
+        });
+</script>
